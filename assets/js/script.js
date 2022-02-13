@@ -35,12 +35,22 @@ var generatePassword = function(){
     message += "\r\n";
     message += "Password length : "+ lengthInput;
     message += "\r\n";
-    message += "Include characters:"+ characterArrayInput;
+    message += "Included characters:"+ characterArrayInput;
     var proceed=  window.confirm(message);
 
   var ensureCharacterType = [...characterArrayInput];
-  chooseCharacter();
-  
+
+  if (proceed)
+    {
+        for (var i = 0; i < length ; i++)
+        {
+            var randomChoice  = pickaRandomCharacterType(characterArrayInput,ensureCharacterType);
+            password += pickRandomCharacter(randomChoice);
+       }
+       console.log(password);
+    }   
+
+    return password;
 }
 
 var choosePasswordLength = function(){     
@@ -88,28 +98,65 @@ var chooseCharacter = function() {
   
   if (lowerCaseInput)
   {
-      arrayOfChoices[idx] = 'lowerCaseInput';
+      arrayOfChoices[idx] = 'LowerCase';
       idx++;
   }
 
   if (upperCaseInput)
   {
-      arrayOfChoices[idx] = 'upperCaseInput';
+      arrayOfChoices[idx] = 'UpperCase';
       idx++;
   }
 
   if(specialCharInput)
   {
-      arrayOfChoices[idx] = 'specialCharInput';    
+      arrayOfChoices[idx] = 'SpecialCharacters';    
       idx++;    
   }
 
   if(numberInput)
   {
-      arrayOfChoices[idx] = 'numberInput';      
+      arrayOfChoices[idx] = 'Numbers';      
   } 
-  return arrayOfChoices;
-  
+  return arrayOfChoices;  
+}
+
+
+var pickRandomCharacter = function(charType)
+{
+    var char='';
+    console.log(charType);
+    switch(charType){
+        case "LowerCase":
+            char= lowerCase.charAt(Math.floor(Math.random()* lowerCase.length));
+            break;
+        case "UpperCase":
+            char = upperCase.charAt(Math.floor(Math.random()* upperCase.length));
+            break;
+        case "SpecialCharacters":
+            char = specialChar.charAt(Math.floor(Math.random() * specialChar.length));
+            break;
+        case "Numbers":
+            char = numbers.charAt(Math.floor(Math.random() * numbers.length));
+    }   
+    return char;
+}
+
+var pickaRandomCharacterType = function( arrayOfChoices, arrayOfChoicesOne){
+  var returnVal;
+  if (arrayOfChoicesOne.length === 0)
+  {
+      var ch = Math.floor(Math.random()* arrayOfChoices.length);
+      returnVal= arrayOfChoices[ch];
+  }
+  else
+  {
+      var ch = Math.floor(Math.random()* arrayOfChoicesOne.length);
+      returnVal= arrayOfChoicesOne[ch];
+      arrayOfChoicesOne.splice(ch,1);     
+  }    
+
+  return returnVal ;
 }
 // Add event listener to generate button
 generateBtn.addEventListener("click", writePassword);
