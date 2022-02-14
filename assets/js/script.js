@@ -68,26 +68,28 @@ var generatePassword = function(){
 
    If user presses cancel in input prompt, the program exits without generating password.
 */
-var choosePasswordLength = function(){   
+
+var j =0 ;
+
+var choosePasswordLength = function(){  
   //debugger;
-  lengthInput = window.prompt("Choose a password length between 8 and 128");
+  var lengthInput = window.prompt("Choose a password length between 8 and 128");
+  
   if(lengthInput === null)
   {
     return;
   } 
 
-  if (!isNaN(lengthInput))
-  {    
-      if (lengthInput < 8 || lengthInput > 128  || Number.isInteger(lengthInput))
-      {
-          window.alert("Choose a number between 8 and 128. Please try again!");
-          generatePassword();
-      }
-      return lengthInput;
+  //Convert the input to a number from string. Using parseFloat instead of parseInt, so that we can check for decimal entries from user.
+  length = parseFloat(lengthInput);
+  
+  if (!isNaN(length) && length >= 8  &&  length <= 128 && Number.isInteger(length) )
+  {      
+      return length;
   }
   else{
       window.alert("Choose a number between 8 and 128. Please try again!");
-      generatePassword();
+      return choosePasswordLength();
   }
 }
 
@@ -105,7 +107,7 @@ var chooseCharacter = function() {
       var chooseOne= window.confirm("Please choose atleast one character type. Click OK to try again!");
       if(chooseOne)
       {
-        chooseCharacter();
+        return chooseCharacter();
       }
       else
       {
