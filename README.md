@@ -18,7 +18,7 @@ To generate a random password. User can make the following choices:
 https://meghark.github.io/generatepassword-htm-css-js-project/
 
 ## Website screenshot
-![Mockup for finished website](./assets/images/website screenshot.png?raw=true)
+![Mockup for finished website](./assets/images/websitescreenshot.png?raw=true)
 
 ## Contribution
 Created by Megha Kulathattil.
