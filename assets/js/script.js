@@ -30,26 +30,32 @@ var generatePassword = function(){
     return "";
   }
   var characterArrayInput  = chooseCharacter();
+  if(!characterArrayInput)
+  {
+    return "";
+  }
 
-  var message = "Here are your choices!";
+  var message = "Here are your choices! Press OK to generate password";
     message += "\r\n";
     message += "Password length : "+ lengthInput;
     message += "\r\n";
-    message += "Included characters:"+ characterArrayInput;
-    var proceed=  window.confirm(message);
+    message += "Included characters : "+ characterArrayInput;
+  var proceed=  window.confirm(message);
 
   var ensureCharacterType = [...characterArrayInput];
-
+  
   if (proceed)
     {
-        for (var i = 0; i < length ; i++)
+        for (var i = 0; i < lengthInput ; i++)
         {
             var randomChoice  = pickaRandomCharacterType(characterArrayInput,ensureCharacterType);
             password += pickRandomCharacter(randomChoice);
        }
-       console.log(password);
+       console.log("Generated password "+password);
     }   
-
+  else{
+    return "";
+  }
     return password;
 }
 
@@ -60,7 +66,7 @@ var generatePassword = function(){
    2. Check that the input falls between 8 and 128 (inclusive).
    3. For other inputs like string, empty , decimal etc display an error message and ask user to choose again.
 
-   If presses cancel.
+   If user presses cancel in input prompt, the program exits without generating password.
 */
 var choosePasswordLength = function(){   
   //debugger;
@@ -68,39 +74,43 @@ var choosePasswordLength = function(){
   if(lengthInput === null)
   {
     return;
-  }
-  
+  } 
+
   if (!isNaN(lengthInput))
-  {     
-  
+  {    
       if (lengthInput < 8 || lengthInput > 128  || Number.isInteger(lengthInput))
       {
           window.alert("Choose a number between 8 and 128. Please try again!");
           generatePassword();
       }
-      console.log(length);
       return lengthInput;
   }
   else{
       window.alert("Choose a number between 8 and 128. Please try again!");
       generatePassword();
   }
-
 }
 
 var chooseCharacter = function() {
   var arrayOfChoices=[];
   var idx=0;
 
-  lowerCaseInput = window.confirm("Do you want to include lower case letters in the password");
-  upperCaseInput = window.confirm("Do you want to include upper case letters in the password");
-  specialCharInput = window.confirm("Do you want to include special char letters in the password");
-  numberInput = window.confirm("Do you want to include number input letters in the password");
+  lowerCaseInput = window.confirm("Press OK to include LOWER CASE characters");
+  upperCaseInput = window.confirm("Press OK to include UPPER CASE characters");
+  specialCharInput = window.confirm('Press OK to include SPECIAL CHARACTERS');
+  numberInput = window.confirm("Press OK to include NUMBERS");
   
   if (!lowerCaseInput && !upperCaseInput && !specialCharInput && !numberInput)
   {
-      window.alert("Please choose atleast one character type!");
-      chooseCharacter();
+      var chooseOne= window.confirm("Please choose atleast one character type. Click OK to try again!");
+      if(chooseOne)
+      {
+        chooseCharacter();
+      }
+      else
+      {
+        return;
+      }      
   } 
   
   if (lowerCaseInput)
@@ -128,11 +138,26 @@ var chooseCharacter = function() {
   return arrayOfChoices;  
 }
 
+var pickaRandomCharacterType = function( arrayOfChoices, arrayOfChoicesOne){
+  var returnVal;
+  if (arrayOfChoicesOne.length === 0)
+  {
+      var ch = Math.floor(Math.random()* arrayOfChoices.length);
+      returnVal= arrayOfChoices[ch];
+  }
+  else
+  {
+      var ch = Math.floor(Math.random()* arrayOfChoicesOne.length);
+      returnVal= arrayOfChoicesOne[ch];
+      arrayOfChoicesOne.splice(ch,1);     
+  }   
+  return returnVal ;
+}
 
 var pickRandomCharacter = function(charType)
 {
     var char='';
-    console.log(charType);
+    console.log("Chosen character type :" +charType);
     switch(charType){
         case "LowerCase":
             char= lowerCase.charAt(Math.floor(Math.random()* lowerCase.length));
@@ -149,21 +174,6 @@ var pickRandomCharacter = function(charType)
     return char;
 }
 
-var pickaRandomCharacterType = function( arrayOfChoices, arrayOfChoicesOne){
-  var returnVal;
-  if (arrayOfChoicesOne.length === 0)
-  {
-      var ch = Math.floor(Math.random()* arrayOfChoices.length);
-      returnVal= arrayOfChoices[ch];
-  }
-  else
-  {
-      var ch = Math.floor(Math.random()* arrayOfChoicesOne.length);
-      returnVal= arrayOfChoicesOne[ch];
-      arrayOfChoicesOne.splice(ch,1);     
-  }    
 
-  return returnVal ;
-}
 // Add event listener to generate button
 generateBtn.addEventListener("click", writePassword);
