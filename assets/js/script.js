@@ -7,9 +7,6 @@ const numbers = '1234567890';
 //A subset of special characters are available for use.
 const specialChar = '!#$%&"()*,@=+-'; 
 
-
-window.alert("Welcome to the password generator!");
-
 // Write password to the #password input
 function writePassword() {
   var password = generatePassword();
@@ -18,10 +15,9 @@ function writePassword() {
   passwordText.value = password;
 }
 
-/* The function generate password will create the new random password based on user specified criteria.
+/* The function generatePassword() will create the new random password based on user specified criteria.
    To do the same it will inturn call other functions to take user input , make random choices etc.
    The code is divided into various functions for easy debugging and to promot reusability.
-
 */
 var generatePassword = function(){
 
@@ -29,6 +25,10 @@ var generatePassword = function(){
   var password ='';
   
   var lengthInput= choosePasswordLength();
+  if(!lengthInput)
+  {
+    return "";
+  }
   var characterArrayInput  = chooseCharacter();
 
   var message = "Here are your choices!";
@@ -53,32 +53,39 @@ var generatePassword = function(){
     return password;
 }
 
-var choosePasswordLength = function(){     
+/* Function provides user with the option to specify password length.
+   The following validations are run to check for user input validity.
+   If any of them are not met , user is given the option to provide input again:
+   1. Check that input is a integer. Decimals will fail validation.
+   2. Check that the input falls between 8 and 128 (inclusive).
+   3. For other inputs like string, empty , decimal etc display an error message and ask user to choose again.
+
+   If presses cancel.
+*/
+var choosePasswordLength = function(){   
+  //debugger;
   lengthInput = window.prompt("Choose a password length between 8 and 128");
-  if (!isNaN(lengthInput))
+  if(lengthInput === null)
   {
-      if( lengthInput % 1 != 0)
+    return;
+  }
+  
+  if (!isNaN(lengthInput))
+  {     
+  
+      if (lengthInput < 8 || lengthInput > 128  || Number.isInteger(lengthInput))
       {
-          window.alert("Decimal Entry")
-          choosePasswordLength();
+          window.alert("Choose a number between 8 and 128. Please try again!");
+          generatePassword();
       }
-
-      length = parseInt(lengthInput);
-
-      if (length < 8 && length > 128)
-      {
-          window.alert("Choice outof range");
-          choosePasswordLength();
-      }
-
       console.log(length);
+      return lengthInput;
   }
   else{
-      window.alert("Invalid Entry.");
-      choosePasswordLength();
+      window.alert("Choose a number between 8 and 128. Please try again!");
+      generatePassword();
   }
 
-  return lengthInput;
 }
 
 var chooseCharacter = function() {
